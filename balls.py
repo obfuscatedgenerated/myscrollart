@@ -3,7 +3,7 @@ import bext
 
 PAUSE_AMOUNT = 0.01
 
-colors = ['red', 'green', 'blue', 'yellow', 'magenta', 'cyan', 'white']
+colors = ["red", "green", "blue", "yellow", "magenta", "cyan", "white"]
 
 x = 0
 s = False
@@ -12,7 +12,7 @@ while True:
     try:
         width = os.get_terminal_size()[0] - 2
         height = os.get_terminal_size()[1] - 2
-        print((x*"=")+"o", end="")
+        print((x * "=") + "o", end="")
         if x == width:
             s = True
             c += 1

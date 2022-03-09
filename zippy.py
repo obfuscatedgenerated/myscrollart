@@ -3,7 +3,7 @@ import bext
 
 PAUSE_AMOUNT = 0.001
 
-colors = ['red', 'green', 'blue', 'yellow', 'magenta', 'cyan', 'white']
+colors = ["red", "green", "blue", "yellow", "magenta", "cyan", "white"]
 
 x = 0
 y = 0
@@ -18,7 +18,7 @@ while True:
             os.system("cls")
         else:
             os.system("clear")
-        print(("\n"*y) + (x*" ")+"o", end="")
+        print(("\n" * y) + (x * " ") + "o", end="")
         if x >= width:
             s = True
             c += 1
