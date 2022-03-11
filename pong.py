@@ -145,3 +145,7 @@ while not running:
     if kp == " ":
         running = True
         main()
+
+bext.hide()
+bext.bg("black")
+bext.fg("white")
