@@ -31,7 +31,7 @@ print("")
 print("Start: space")
 
 running = False
-
+ghost_for_float = False # set to True to make the ball Y not strictly an int at render (i.e. will blink when not on an exact pixel value rather than hopping between pixels)
 
 def header_render(width, text):
     return (" " * int((width - len(text))/2)) + text + " " * int((width - len(text))/2)
@@ -50,6 +50,7 @@ def main():
     BALL_X = int(width/2)
     BALL_Y = int(height/2)
     BALL_DIR = random.randint(0, 1)
+    BALL_SPIN = 0
 
     L_pos = int(height/2)
     R_pos = int(height/2)
@@ -72,11 +73,11 @@ def main():
             for y in range(height):
                 row = ""
                 for x in range(width):
-                    if x == BALL_X and y == BALL_Y:
+                    if x == BALL_X and ((y == int(BALL_Y) and not ghost_for_float) or (y == BALL_Y and ghost_for_float)):
                         row += ball_char
-                    elif x == 5 and y in range(L_pos-1, L_pos+2):
+                    elif x == 5 and y in range(L_pos-2, L_pos+3):
                         row += paddle_char
-                    elif x == width-5 and y in range(R_pos-1, R_pos+2):
+                    elif x == width-5 and y in range(R_pos-2, R_pos+3):
                         row += paddle_char
                     else:
                         row += " "
@@ -86,6 +87,8 @@ def main():
             if BALL_X == 0:
                 BALL_X = int(width/2)
                 BALL_Y = int(height/2)
+                BALL_DIR = random.randint(0, 1)
+                BALL_SPIN = 0
                 L_pos = int(height/2)
                 R_pos = int(height/2)
                 R_score += 1
@@ -94,32 +97,40 @@ def main():
             if BALL_X == width:
                 BALL_X = int(width/2)
                 BALL_Y = int(height/2)
+                BALL_DIR = random.randint(0, 1)
+                BALL_SPIN = 0
                 L_pos = int(height/2)
                 R_pos = int(height/2)
                 L_score += 1
                 beep(490, 0.257)
 
-            # TODO: deflection physics https://stackoverflow.com/questions/8990153/pong-reflector-math https://gamedev.stackexchange.com/questions/147773/what-is-original-pong-ball-behaviour https://gamedev.stackexchange.com/questions/74148/having-issues-with-pong-physics-is-my-approach-wrong
-            if BALL_Y in range(L_pos-1, L_pos+2) and BALL_X == 5:
+            if int(BALL_Y) in range(L_pos-2, L_pos+3) and BALL_X == 5:
                 BALL_DIR = 1
+                BALL_SPIN = BALL_Y - L_pos
                 #beep(459, 0.096)
             
-            if BALL_Y in range(R_pos-1, R_pos+2) and BALL_X == width-5:
+            if int(BALL_Y) in range(R_pos-2, R_pos+3) and BALL_X == width-5:
                 BALL_DIR = 0
+                BALL_SPIN = BALL_Y - R_pos
                 #beep(459, 0.096)
+            
+            if int(BALL_Y) <= 0 or int(BALL_Y) >= height:
+                BALL_SPIN = -BALL_SPIN
             
             if BALL_DIR == 0:
                 BALL_X -= 1
             else:
                 BALL_X += 1
             
-            if keyboard.is_pressed("w") and L_pos > 2:
+            BALL_Y += BALL_SPIN/8
+            
+            if keyboard.is_pressed("w") and L_pos > 3:
                 L_pos -= 1
-            elif keyboard.is_pressed("s") and L_pos < height-2:
+            elif keyboard.is_pressed("s") and L_pos < height-3:
                 L_pos += 1
-            elif keyboard.is_pressed("o") and R_pos > 2:
+            elif keyboard.is_pressed("o") and R_pos > 3:
                 R_pos -= 1
-            elif keyboard.is_pressed("l") and R_pos < height-2:
+            elif keyboard.is_pressed("l") and R_pos < height-3:
                 R_pos += 1
 
             print(flush=True)
