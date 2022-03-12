@@ -31,6 +31,7 @@ def non_blocking_beep(freq, secs):
 
 sound = True
 ghost_for_float = False
+centerline = True
 
 PAUSE_AMOUNT = 0.001
 
@@ -51,7 +52,7 @@ bext.hide()
 
 clear()
 width, height = tuple(x-y for x, y in zip(bext.size(), (2, 2))) # get size and subtract 2
-print("\n" * int((height-10)/2), end="")
+print("\n" * int((height-11)/2), end="")
 print(header_render(width, "PONG"))
 print("")
 print(header_render(width, "Left Paddle: w, s"))
@@ -62,6 +63,7 @@ print(header_render(width, "Pause: b"))
 print("")
 print(header_render(width, "Toggle sound (default: on): 1"))
 print(header_render(width, "Toggle ball ghosting (default: off): 2"))
+print(header_render(width, "Toggle center line (default: on): 3"))
 
 
 def main():
@@ -90,7 +92,7 @@ def main():
             width, height = tuple(x-y for x, y in zip(bext.size(), (2, 2))) # get size and subtract 2
             clear()
             #print(header_render(width, "PONG"))
-            print(header_render(width, str(L_score) + " : " + str(R_score)))
+            print(header_render(width, str(L_score) + " | " + str(R_score)))
 
             frame = ""
             for y in range(height):
@@ -102,6 +104,8 @@ def main():
                         row += PADDLE_CHAR
                     elif x == width-5 and y in range(R_pos-2, R_pos+3):
                         row += PADDLE_CHAR
+                    elif x == int(width/2) and centerline:
+                        row += "|"
                     else:
                         row += " "
                 frame += row + "\n"
@@ -186,8 +190,13 @@ def g_tog():
     global ghost_for_float
     ghost_for_float = not ghost_for_float
 
+def c_tog():
+    global centerline
+    centerline = not centerline
+
 keyboard.add_hotkey("1", s_tog)
 keyboard.add_hotkey("2", g_tog)
+keyboard.add_hotkey("3", c_tog)
 
 while not running:
     kp = bext.getKey(blocking=True)
