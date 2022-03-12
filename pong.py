@@ -49,13 +49,14 @@ def clear():
 clear()
 width = os.get_terminal_size()[0] - 2
 height = os.get_terminal_size()[1] - 2
-print("\n" * int((height-9)/2), end="")
+print("\n" * int((height-10)/2), end="")
 print(header_render(width, "PONG"))
 print("")
 print(header_render(width, "Left Paddle: w, s"))
 print(header_render(width, "Right Paddle: o, l"))
 print("")
-print(header_render(width, "Start: space"))
+print(header_render(width, "Start / Unpause: space"))
+print(header_render(width, "Pause: b"))
 print("")
 print(header_render(width, "Toggle sound (default: on): 1"))
 print(header_render(width, "Toggle ball ghosting (default: off): 2"))
@@ -166,6 +167,9 @@ def main():
                 R_pos -= 1
             elif keyboard.is_pressed("l") and R_pos < height-3:
                 R_pos += 1
+            
+            if keyboard.is_pressed("b"):
+                keyboard.wait(" ")
 
             bext.hide()
             print(flush=True)
