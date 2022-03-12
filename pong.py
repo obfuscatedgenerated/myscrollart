@@ -34,20 +34,33 @@ ghost_for_float = False
 
 PAUSE_AMOUNT = 0.001
 
-print("PONG")
-print("")
-print("Left Paddle: w, s")
-print("Right Paddle: o, l")
-print("")
-print("Start: space")
-print("")
-print("Toggle sound (default: on): 1")
-print("Toggle ball ghosting (default: off): 2")
-
 running = False
 
 def header_render(width, text):
     return (" " * int((width - len(text))/2)) + text + " " * int((width - len(text))/2)
+
+def clear():
+    if os.name == "nt":
+        os.system("cls")
+    else:
+        os.system("clear")
+
+
+clear()
+width = os.get_terminal_size()[0] - 2
+height = os.get_terminal_size()[1] - 2
+print("\n" * int((height-9)/2), end="")
+print(header_render(width, "PONG"))
+print("")
+print(header_render(width, "Left Paddle: w, s"))
+print(header_render(width, "Right Paddle: o, l"))
+print("")
+print(header_render(width, "Start: space"))
+print("")
+print(header_render(width, "Toggle sound (default: on): 1"))
+print(header_render(width, "Toggle ball ghosting (default: off): 2"))
+bext.hide()
+
 
 def main():
     L_score = 0
@@ -75,10 +88,7 @@ def main():
         try:
             width = os.get_terminal_size()[0] - 2
             height = os.get_terminal_size()[1] - 2
-            if os.name == "nt":
-                os.system("cls")
-            else:
-                os.system("clear")
+            clear()
             #print(header_render(width, "PONG"))
             print(header_render(width, str(L_score) + " : " + str(R_score)))
 
