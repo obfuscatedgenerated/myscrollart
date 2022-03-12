@@ -39,7 +39,6 @@ sound = True
 ghost_for_float = False
 centerline = True
 stereo_sound = True
-colour_sep = False
 
 PAUSE_AMOUNT = 0.001
 
@@ -73,7 +72,6 @@ print(header_render(width, "Toggle sound (default: on): 1"))
 print(header_render(width, "Toggle ball ghosting (default: off): 2"))
 print(header_render(width, "Toggle center line (default: on): 3"))
 print(header_render(width, "Toggle stereo output (default: on): 4"))
-print(header_render(width, "Toggle colour separation (default: off): 5"))
 
 
 def main():
@@ -208,15 +206,10 @@ def ss_tog():
     global stereo_sound
     stereo_sound = not stereo_sound
 
-def cs_tog():
-    global colour_sep
-    colour_sep = not colour_sep
-
 keyboard.add_hotkey("1", s_tog)
 keyboard.add_hotkey("2", g_tog)
 keyboard.add_hotkey("3", c_tog)
 keyboard.add_hotkey("4", ss_tog)
-keyboard.add_hotkey("5", cs_tog)
 
 while not running:
     kp = bext.getKey(blocking=True)
