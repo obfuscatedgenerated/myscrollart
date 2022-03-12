@@ -134,6 +134,7 @@ def main():
             elif keyboard.is_pressed("l") and R_pos < height-3:
                 R_pos += 1
 
+            print("\033[?25l", end="")
             print(flush=True)
             time.sleep(PAUSE_AMOUNT)
         except (KeyboardInterrupt, SystemExit):
@@ -148,5 +149,6 @@ while not running:
         main()
 
 bext.hide()
+print("\033[?25l", end="")
 bext.bg("black")
 bext.fg("white")
