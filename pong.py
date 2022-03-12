@@ -12,9 +12,9 @@ from threading import Timer
 def pitch2freq(pitch):
     return 261.625565 * 2 ** (pitch / 12)
 
-
 def freq2pitch(freq):
     return abs(12 * math.log2(261.625565 / freq))
+
 
 
 def beep(freq, secs):  # cross platform winsound alternative
@@ -28,6 +28,10 @@ def non_blocking_beep(freq, secs):
     sinewave.play()
     Timer(secs, sinewave.stop).start()
 
+
+sound = True
+ghost_for_float = False
+
 PAUSE_AMOUNT = 0.001
 
 print("PONG")
@@ -36,9 +40,11 @@ print("Left Paddle: w, s")
 print("Right Paddle: o, l")
 print("")
 print("Start: space")
+print("")
+print("Toggle sound (default: on): 1")
+print("Toggle ball ghosting (default: off): 2")
 
 running = False
-ghost_for_float = False # set to True to make the ball Y not strictly an int at render (i.e. will blink when not on an exact pixel value rather than hopping between pixels)
 
 def header_render(width, text):
     return (" " * int((width - len(text))/2)) + text + " " * int((width - len(text))/2)
@@ -99,7 +105,10 @@ def main():
                 L_pos = int(height/2)
                 R_pos = int(height/2)
                 R_score += 1
-                beep(490, 0.257)
+                if sound:
+                    beep(490, 0.257)
+                else:
+                    time.sleep(0.257)
 
             if BALL_X == width:
                 BALL_X = int(width/2)
@@ -109,20 +118,27 @@ def main():
                 L_pos = int(height/2)
                 R_pos = int(height/2)
                 L_score += 1
-                beep(490, 0.257)
+                if sound:
+                    beep(490, 0.257)
+                else:
+                    time.sleep(0.257)
 
             if int(BALL_Y) in range(L_pos-2, L_pos+3) and BALL_X == 5:
                 BALL_DIR = 1
                 BALL_SPIN = BALL_Y - L_pos
-                non_blocking_beep(459, 0.096)
+                if sound:
+                    non_blocking_beep(459, 0.096)
             
             if int(BALL_Y) in range(R_pos-2, R_pos+3) and BALL_X == width-5:
                 BALL_DIR = 0
                 BALL_SPIN = BALL_Y - R_pos
-                non_blocking_beep(459, 0.096)
+                if sound:
+                    non_blocking_beep(459, 0.096)
             
             if int(BALL_Y) <= 1 or int(BALL_Y) >= height-1:
                 BALL_SPIN = -BALL_SPIN
+                if sound:
+                    non_blocking_beep(226, 0.066) # in the real game it should be 0.016 but that doesn't register here
             
             if BALL_DIR == 0:
                 BALL_X -= 1
@@ -149,11 +165,23 @@ def main():
             print("\nBye!")
             break
 
+
+bext.bg("black")
+bext.fg("white")
+
+def s_tog():
+    global sound
+    sound = not sound
+
+def g_tog():
+    global ghost_for_float
+    ghost_for_float = not ghost_for_float
+
+keyboard.add_hotkey("1", s_tog)
+keyboard.add_hotkey("2", g_tog)
+
 while not running:
     kp = bext.getKey(blocking=True)
     if kp == " ":
         running = True
         main()
-
-bext.bg("black")
-bext.fg("white")
