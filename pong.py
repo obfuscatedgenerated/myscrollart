@@ -17,14 +17,20 @@ def freq2pitch(freq):
 
 
 
-def beep(freq, secs):  # cross platform winsound alternative
-    sinewave = SineWave(pitch=freq2pitch(freq))
+def beep(freq, secs, stereo=False, channel="lr"):  # cross platform winsound alternative
+    if stereo:
+        sinewave = SineWave(pitch=freq2pitch(freq), channels=2, channel_side=channel)
+    else:
+        sinewave = SineWave(pitch=freq2pitch(freq))
     sinewave.play()
     time.sleep(secs)
     sinewave.stop()
 
-def non_blocking_beep(freq, secs):
-    sinewave = SineWave(pitch=freq2pitch(freq))
+def non_blocking_beep(freq, secs, stereo=False, channel="lr"):
+    if stereo:
+        sinewave = SineWave(pitch=freq2pitch(freq), channels=2, channel_side=channel)
+    else:
+        sinewave = SineWave(pitch=freq2pitch(freq))
     sinewave.play()
     Timer(secs, sinewave.stop).start()
 
@@ -32,6 +38,8 @@ def non_blocking_beep(freq, secs):
 sound = True
 ghost_for_float = False
 centerline = True
+stereo_sound = True
+colour_sep = False
 
 PAUSE_AMOUNT = 0.001
 
@@ -52,7 +60,7 @@ bext.hide()
 
 clear()
 width, height = tuple(x-y for x, y in zip(bext.size(), (2, 2))) # get size and subtract 2
-print("\n" * int((height-11)/2), end="")
+print("\n" * int((height-13)/2), end="")
 print(header_render(width, "PONG"))
 print("")
 print(header_render(width, "Left Paddle: w, s"))
@@ -64,6 +72,8 @@ print("")
 print(header_render(width, "Toggle sound (default: on): 1"))
 print(header_render(width, "Toggle ball ghosting (default: off): 2"))
 print(header_render(width, "Toggle center line (default: on): 3"))
+print(header_render(width, "Toggle stereo output (default: on): 4"))
+print(header_render(width, "Toggle colour separation (default: off): 5"))
 
 
 def main():
@@ -141,13 +151,13 @@ def main():
                 ball_dir = 1
                 ball_spin = ball_y - L_pos
                 if sound:
-                    non_blocking_beep(459, 0.096)
+                    non_blocking_beep(459, 0.096, stereo=stereo_sound, channel="l")
             
             if int(ball_y) in range(R_pos-2, R_pos+3) and ball_x == width-5:
                 ball_dir = 0
                 ball_spin = ball_y - R_pos
                 if sound:
-                    non_blocking_beep(459, 0.096)
+                    non_blocking_beep(459, 0.096, stereo=stereo_sound, channel="r")
             
             if int(ball_y) <= 1 or int(ball_y) >= height-1:
                 ball_spin = -ball_spin
@@ -194,9 +204,19 @@ def c_tog():
     global centerline
     centerline = not centerline
 
+def ss_tog():
+    global stereo_sound
+    stereo_sound = not stereo_sound
+
+def cs_tog():
+    global colour_sep
+    colour_sep = not colour_sep
+
 keyboard.add_hotkey("1", s_tog)
 keyboard.add_hotkey("2", g_tog)
 keyboard.add_hotkey("3", c_tog)
+keyboard.add_hotkey("4", ss_tog)
+keyboard.add_hotkey("5", cs_tog)
 
 while not running:
     kp = bext.getKey(blocking=True)
