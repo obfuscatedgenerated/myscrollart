@@ -47,7 +47,7 @@ def clear():
 
 
 clear()
-width, height = tuple(x-y for x, y in zip(bext.size(), (2, 2)))
+width, height = tuple(x-y for x, y in zip(bext.size(), (2, 2))) # get size and subtract 2
 print("\n" * int((height-10)/2), end="")
 print(header_render(width, "PONG"))
 print("")
@@ -70,7 +70,7 @@ def main():
     ball_x = 0
     ball_y = 0
 
-    width, height = tuple(x-y for x, y in zip(bext.size(), (2, 2)))
+    width, height = tuple(x-y for x, y in zip(bext.size(), (2, 2))) # get size and subtract 2
 
     ball_x = int(width/2)
     ball_y = int(height/2)
@@ -85,7 +85,7 @@ def main():
 
     while True:
         try:
-            width, height = tuple(x-y for x, y in zip(bext.size(), (2, 2)))
+            width, height = tuple(x-y for x, y in zip(bext.size(), (2, 2))) # get size and subtract 2
             clear()
             #print(header_render(width, "PONG"))
             print(header_render(width, str(L_score) + " : " + str(R_score)))
