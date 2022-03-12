@@ -186,6 +186,7 @@ def main():
             print(flush=True)
             time.sleep(PAUSE_AMOUNT)
         except (KeyboardInterrupt, SystemExit):
+            clear()
             bext.fg("reset")
             print("\nBye!")
             break

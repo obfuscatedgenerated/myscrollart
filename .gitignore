@@ -1,2 +1,7 @@
 .dccache
 /env/
+*.pyc
+/build/
+/dist/
+/spec/
+build.sh
