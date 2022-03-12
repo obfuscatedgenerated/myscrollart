@@ -23,7 +23,7 @@ def beep(freq, secs):  # cross platform winsound alternative
 
 PAUSE_AMOUNT = 0.001
 
-print("PONG BY OBFUSCATEDGENERATED")
+print("PONG")
 print("")
 print("Left Paddle: w, s")
 print("Right Paddle: o, l")
@@ -114,7 +114,7 @@ def main():
                 BALL_SPIN = BALL_Y - R_pos
                 #beep(459, 0.096)
             
-            if int(BALL_Y) <= 0 or int(BALL_Y) >= height:
+            if int(BALL_Y) <= 1 or int(BALL_Y) >= height-1:
                 BALL_SPIN = -BALL_SPIN
             
             if BALL_DIR == 0:
