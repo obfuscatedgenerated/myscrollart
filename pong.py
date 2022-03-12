@@ -6,6 +6,8 @@ import keyboard
 import math
 from pysinewave import SineWave
 
+from threading import Timer
+
 
 def pitch2freq(pitch):
     return 261.625565 * 2 ** (pitch / 12)
@@ -20,6 +22,11 @@ def beep(freq, secs):  # cross platform winsound alternative
     sinewave.play()
     time.sleep(secs)
     sinewave.stop()
+
+def non_blocking_beep(freq, secs):
+    sinewave = SineWave(pitch=freq2pitch(freq))
+    sinewave.play()
+    Timer(secs, sinewave.stop).start()
 
 PAUSE_AMOUNT = 0.001
 
@@ -107,12 +114,12 @@ def main():
             if int(BALL_Y) in range(L_pos-2, L_pos+3) and BALL_X == 5:
                 BALL_DIR = 1
                 BALL_SPIN = BALL_Y - L_pos
-                #beep(459, 0.096)
+                non_blocking_beep(459, 0.096)
             
             if int(BALL_Y) in range(R_pos-2, R_pos+3) and BALL_X == width-5:
                 BALL_DIR = 0
                 BALL_SPIN = BALL_Y - R_pos
-                #beep(459, 0.096)
+                non_blocking_beep(459, 0.096)
             
             if int(BALL_Y) <= 1 or int(BALL_Y) >= height-1:
                 BALL_SPIN = -BALL_SPIN
