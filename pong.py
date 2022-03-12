@@ -54,22 +54,22 @@ def main():
     R_score = 0
     L_pos = 0
     R_pos = 0
-    BALL_X = 0
-    BALL_Y = 0
+    ball_x = 0
+    ball_y = 0
 
     width = os.get_terminal_size()[0] - 2
     height = os.get_terminal_size()[1] - 2
 
-    BALL_X = int(width/2)
-    BALL_Y = int(height/2)
-    BALL_DIR = random.randint(0, 1)
-    BALL_SPIN = 0
+    ball_x = int(width/2)
+    ball_y = int(height/2)
+    ball_dir = random.randint(0, 1)
+    ball_spin = 0
 
     L_pos = int(height/2)
     R_pos = int(height/2)
 
-    paddle_char = "■"
-    ball_char = "■"
+    PADDLE_CHAR = "■"
+    BALL_CHAR = "■"
 
     while True:
         try:
@@ -86,7 +86,7 @@ def main():
             for y in range(height):
                 row = ""
                 for x in range(width):
-                    if x == BALL_X and ((y == int(BALL_Y) and not ghost_for_float) or (y == BALL_Y and ghost_for_float)):
+                    if x == ball_x and ((y == int(ball_y) and not ghost_for_float) or (y == ball_y and ghost_for_float)):
                         row += ball_char
                     elif x == 5 and y in range(L_pos-2, L_pos+3):
                         row += paddle_char
@@ -97,11 +97,11 @@ def main():
                 frame += row + "\n"
             print(frame.rstrip(), end="")
 
-            if BALL_X == 0:
-                BALL_X = int(width/2)
-                BALL_Y = int(height/2)
-                BALL_DIR = random.randint(0, 1)
-                BALL_SPIN = 0
+            if ball_x == 0:
+                ball_x = int(width/2)
+                ball_y = int(height/2)
+                ball_dir = random.randint(0, 1)
+                ball_spin = 0
                 L_pos = int(height/2)
                 R_pos = int(height/2)
                 R_score += 1
@@ -110,11 +110,11 @@ def main():
                 else:
                     time.sleep(0.257)
 
-            if BALL_X == width:
-                BALL_X = int(width/2)
-                BALL_Y = int(height/2)
-                BALL_DIR = random.randint(0, 1)
-                BALL_SPIN = 0
+            if ball_x == width:
+                ball_x = int(width/2)
+                ball_y = int(height/2)
+                ball_dir = random.randint(0, 1)
+                ball_spin = 0
                 L_pos = int(height/2)
                 R_pos = int(height/2)
                 L_score += 1
@@ -123,29 +123,29 @@ def main():
                 else:
                     time.sleep(0.257)
 
-            if int(BALL_Y) in range(L_pos-2, L_pos+3) and BALL_X == 5:
-                BALL_DIR = 1
-                BALL_SPIN = BALL_Y - L_pos
+            if int(ball_y) in range(L_pos-2, L_pos+3) and ball_x == 5:
+                ball_dir = 1
+                ball_spin = ball_y - L_pos
                 if sound:
                     non_blocking_beep(459, 0.096)
             
-            if int(BALL_Y) in range(R_pos-2, R_pos+3) and BALL_X == width-5:
-                BALL_DIR = 0
-                BALL_SPIN = BALL_Y - R_pos
+            if int(ball_y) in range(R_pos-2, R_pos+3) and ball_x == width-5:
+                ball_dir = 0
+                ball_spin = ball_y - R_pos
                 if sound:
                     non_blocking_beep(459, 0.096)
             
-            if int(BALL_Y) <= 1 or int(BALL_Y) >= height-1:
-                BALL_SPIN = -BALL_SPIN
+            if int(ball_y) <= 1 or int(ball_y) >= height-1:
+                ball_spin = -ball_spin
                 if sound:
                     non_blocking_beep(226, 0.066) # in the real game it should be 0.016 but that doesn't register here
             
-            if BALL_DIR == 0:
-                BALL_X -= 1
+            if ball_dir == 0:
+                ball_x -= 1
             else:
-                BALL_X += 1
+                ball_x += 1
             
-            BALL_Y += BALL_SPIN/8
+            ball_y += ball_spin/8
             
             if keyboard.is_pressed("w") and L_pos > 3:
                 L_pos -= 1
