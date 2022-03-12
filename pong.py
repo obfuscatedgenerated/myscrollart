@@ -87,11 +87,11 @@ def main():
                 row = ""
                 for x in range(width):
                     if x == ball_x and ((y == int(ball_y) and not ghost_for_float) or (y == ball_y and ghost_for_float)):
-                        row += ball_char
+                        row += BALL_CHAR
                     elif x == 5 and y in range(L_pos-2, L_pos+3):
-                        row += paddle_char
+                        row += PADDLE_CHAR
                     elif x == width-5 and y in range(R_pos-2, R_pos+3):
-                        row += paddle_char
+                        row += PADDLE_CHAR
                     else:
                         row += " "
                 frame += row + "\n"
