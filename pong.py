@@ -128,7 +128,8 @@ def main():
                 L_pos -= 1
             elif keyboard.is_pressed("s") and L_pos < height-3:
                 L_pos += 1
-            elif keyboard.is_pressed("o") and R_pos > 3:
+                
+            if keyboard.is_pressed("o") and R_pos > 3:
                 R_pos -= 1
             elif keyboard.is_pressed("l") and R_pos < height-3:
                 R_pos += 1
