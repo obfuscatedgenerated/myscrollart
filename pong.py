@@ -45,6 +45,9 @@ def clear():
     else:
         os.system("clear")
 
+bext.bg("black")
+bext.fg("white")
+bext.hide()
 
 clear()
 width, height = tuple(x-y for x, y in zip(bext.size(), (2, 2))) # get size and subtract 2
@@ -59,7 +62,6 @@ print(header_render(width, "Pause: b"))
 print("")
 print(header_render(width, "Toggle sound (default: on): 1"))
 print(header_render(width, "Toggle ball ghosting (default: off): 2"))
-bext.hide()
 
 
 def main():
@@ -175,10 +177,6 @@ def main():
             bext.fg("reset")
             print("\nBye!")
             break
-
-
-bext.bg("black")
-bext.fg("white")
 
 def s_tog():
     global sound
