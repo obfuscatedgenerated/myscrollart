@@ -31,7 +31,7 @@ class Line:
 lines = []
 
 width, height = (os.get_terminal_size().columns-2, os.get_terminal_size().lines-2)
-for i in range(0, int(width/10)):
+for i in range(1, int(width/10)):
     lines.append(Line(i*10, 1-(2*random.randint(0, 1))))
 
 bext.hide()
