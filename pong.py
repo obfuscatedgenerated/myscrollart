@@ -58,7 +58,7 @@ bext.fg("white")
 bext.hide()
 
 clear()
-width, height = tuple(x-y for x, y in zip(bext.size(), (2, 2))) # get size and subtract 2
+width, height = (os.get_terminal_size().columns-2, os.get_terminal_size().lines-2)
 print("\n" * int((height-13)/2), end="")
 print(header_render(width, "PONG"))
 print("")
@@ -82,7 +82,7 @@ def main():
     ball_x = 0
     ball_y = 0
 
-    width, height = tuple(x-y for x, y in zip(bext.size(), (2, 2))) # get size and subtract 2
+    width, height = (os.get_terminal_size().columns-2, os.get_terminal_size().lines-2)
 
     ball_x = int(width/2)
     ball_y = int(height/2)
@@ -97,7 +97,7 @@ def main():
 
     while True:
         try:
-            width, height = tuple(x-y for x, y in zip(bext.size(), (2, 2))) # get size and subtract 2
+            width, height = (os.get_terminal_size().columns-2, os.get_terminal_size().lines-2)
             clear()
             #print(header_render(width, "PONG"))
             print(header_render(width, str(L_score) + " | " + str(R_score)))
