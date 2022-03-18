@@ -36,8 +36,8 @@ class Positionable:
         self._color = color
     
     def _accelCallback(self, info=None):
-        info["x_curr_speed"] += info["x_accel"] * info["i"]
-        info["y_curr_speed"] += info["y_accel"] * info["i"]
+        info["x_curr_speed"] += info["x_accel"]
+        info["y_curr_speed"] += info["y_accel"]
         self._x += info["x_curr_speed"]
         self._y += info["y_curr_speed"]
         if not info["time_ticks"] == info["i"]:
@@ -45,8 +45,17 @@ class Positionable:
             RichTimer(PAUSE_AMOUNT, self._accelCallback, info=info)
     
     def accelerateBy(self, x_accel, y_accel, time_ticks):
+        assert time_ticks > 0, "time_ticks must be greater than 0"
+        assert int(time_ticks) == time_ticks, "time_ticks must be an integer"
         RichTimer(PAUSE_AMOUNT, self._accelCallback, info={"i": 0, "x_curr_speed": 0, "y_curr_speed": 0, "x_accel": x_accel, "y_accel": y_accel, "time_ticks": time_ticks})
-
+    
+    def accelerateTo(self, x_targ, y_targ, time_ticks):
+        assert time_ticks > 0, "time_ticks must be greater than 0"
+        assert int(time_ticks) == time_ticks, "time_ticks must be an integer"
+        # a = s - ut / 0.5t^2 (ut = 0 since init vel assumed to by 0)
+        x_accel = (x_targ - self._x) / (0.5 * (time_ticks ** 2))
+        y_accel = (y_targ - self._y) / (0.5 * (time_ticks ** 2))
+        self.accelerateBy(x_accel, y_accel, time_ticks)
         
 
 class Fireball(Positionable):
@@ -61,22 +70,27 @@ def clear():
     os.system("cls" if os.name == "nt" else "clear")
 
 def main():
+    width, height = (os.get_terminal_size().columns-2, os.get_terminal_size().lines-2)
     test = Positionable(0, 0, None)
-    test.accelerateBy(0.001, 0, 100)
+    test.accelerateTo(width/2, height/2, 100)
     while True:
-        width, height = (os.get_terminal_size().columns-2, os.get_terminal_size().lines-2)
-        clear()
-        frame = ""
-        for i in range(height):
-            row = ""
-            for j in range(width):
-                if i == int(test.getPos()[1]) and j == int(test.getPos()[0]):
-                    row += "O"
-                else:
-                    row += " "
-            frame += row + "\n"
-        print(frame)
-        time.sleep(PAUSE_AMOUNT)
+        try:
+            width, height = (os.get_terminal_size().columns-2, os.get_terminal_size().lines-2)
+            clear()
+            frame = ""
+            for i in range(height):
+                row = ""
+                for j in range(width):
+                    if i == int(test.getPos()[1]) and j == int(test.getPos()[0]):
+                        row += "O"
+                    else:
+                        row += " "
+                frame += row + "\n"
+            print(frame)
+            time.sleep(PAUSE_AMOUNT)
+        except (KeyboardInterrupt, SystemExit):
+            print("Bye!")
+            break
 
 bext.hide()
 main()
