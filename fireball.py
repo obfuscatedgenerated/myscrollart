@@ -61,10 +61,15 @@ class Positionable:
 class Fireball(Positionable):
     def __init__(self, start_x, start_y, color):
         super().__init__(start_x, start_y, color)
+        # accelerate to positions on the screen every so often
 
 class FireTracer(Positionable):
     def __init__(self, start_x, start_y, color, objective_ball):
         super().__init__(start_x, start_y, color)
+        # accelerate towards the ball
+        # add random acceleration additionally that goes past ball
+        # after delay, begin new acceleration towards ball and repeat
+        # this makes the tracer graphic swarm around the fireball randomly, and when combined with other tracers should look cool
 
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
@@ -82,7 +87,7 @@ def main():
                 row = ""
                 for j in range(width):
                     if i == int(test.getPos()[1]) and j == int(test.getPos()[0]):
-                        row += "O"
+                        row += "T"
                     else:
                         row += " "
                 frame += row + "\n"
