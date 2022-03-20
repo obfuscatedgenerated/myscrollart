@@ -43,19 +43,22 @@ class Positionable:
         if not info["time_ticks"] == info["i"]:
             info["i"] += 1
             RichTimer(PAUSE_AMOUNT, self._accelCallback, info=info)
+        else:
+            if info["callback"] is not None:
+                info["callback"]()
     
-    def accelerateBy(self, x_accel, y_accel, time_ticks):
+    def accelerateBy(self, x_accel, y_accel, time_ticks, callback=None):
         assert time_ticks > 0, "time_ticks must be greater than 0"
         assert int(time_ticks) == time_ticks, "time_ticks must be an integer"
-        RichTimer(PAUSE_AMOUNT, self._accelCallback, info={"i": 0, "x_curr_speed": 0, "y_curr_speed": 0, "x_accel": x_accel, "y_accel": y_accel, "time_ticks": time_ticks})
+        RichTimer(PAUSE_AMOUNT, self._accelCallback, info={"i": 0, "x_curr_speed": 0, "y_curr_speed": 0, "x_accel": x_accel, "y_accel": y_accel, "time_ticks": time_ticks, "callback": callback})
     
-    def accelerateTo(self, x_targ, y_targ, time_ticks):
+    def accelerateTo(self, x_targ, y_targ, time_ticks, callback=None):
         assert time_ticks > 0, "time_ticks must be greater than 0"
         assert int(time_ticks) == time_ticks, "time_ticks must be an integer"
         # a = s - ut / 0.5t^2 (ut = 0 since init vel assumed to by 0)
         x_accel = (x_targ - self._x) / (0.5 * (time_ticks ** 2))
         y_accel = (y_targ - self._y) / (0.5 * (time_ticks ** 2))
-        self.accelerateBy(x_accel, y_accel, time_ticks)
+        self.accelerateBy(x_accel, y_accel, time_ticks, callback)
         
 
 class Fireball(Positionable):
@@ -66,10 +69,19 @@ class Fireball(Positionable):
 class FireTracer(Positionable):
     def __init__(self, start_x, start_y, color, objective_ball):
         super().__init__(start_x, start_y, color)
-        # accelerate towards the ball
-        # add random acceleration additionally that goes past ball
+    
+    def _traceCallback(self, dir_vector):
+        dir_mag = math.sqrt(dir_vector[0] ** 2 + dir_vector[1] ** 2) # get magnitude of direction vector
+        dir_norm = (dir_vector[0] / dir_mag, dir_vector[1] / dir_mag) # normalize direction vector
+        random_accel = (random.randint(1, 5) * dir_norm[0], random.randint(1, 5) * dir_norm[1]) # get random acceleration vector in direction of direction vector
+        self.accelerateBy(random_accel[0], random_accel[1], random.randint(25, 500))
         # after delay, begin new acceleration towards ball and repeat
         # this makes the tracer graphic swarm around the fireball randomly, and when combined with other tracers should look cool
+    
+    def trace():
+        dir_vector = (self._x - objective_ball._x, self._y - objective_ball._y)
+        self.accelerateTo(objective_ball.getPos()[0], objective_ball.getPos()[1], random.randint(25, 500), lambda: self._traceCallback(dir_vector)) # accelerate to ball and then call the callback after
+
 
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
