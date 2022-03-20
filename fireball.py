@@ -78,9 +78,10 @@ class FireTracer(Positionable):
         # after delay, begin new acceleration towards ball and repeat
         # this makes the tracer graphic swarm around the fireball randomly, and when combined with other tracers should look cool
     
-    def trace():
+    def trace(self):
         dir_vector = (self._x - objective_ball._x, self._y - objective_ball._y)
         self.accelerateTo(objective_ball.getPos()[0], objective_ball.getPos()[1], random.randint(25, 500), lambda: self._traceCallback(dir_vector)) # accelerate to ball and then call the callback after
+
 
 
 def clear():
