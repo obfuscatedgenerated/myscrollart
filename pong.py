@@ -95,8 +95,11 @@ def main():
     PADDLE_CHAR = "■"
     BALL_CHAR = "■"
 
+    delta = 0
+
     while True:
         try:
+            start_time = time.time()
             width, height = (os.get_terminal_size().columns-2, os.get_terminal_size().lines-2)
             clear()
             #print(header_render(width, "PONG"))
@@ -106,7 +109,7 @@ def main():
             for y in range(height):
                 row = ""
                 for x in range(width):
-                    if x == ball_x and ((y == int(ball_y) and not ghost_for_float) or (y == ball_y and ghost_for_float)):
+                    if x == int(ball_x) and ((y == int(ball_y) and not ghost_for_float) or (y == ball_y and ghost_for_float)):
                         row += BALL_CHAR
                     elif x == 5 and y in range(L_pos-2, L_pos+3):
                         row += PADDLE_CHAR
@@ -119,7 +122,7 @@ def main():
                 frame += row + "\n"
             print(frame.rstrip(), end="")
 
-            if ball_x == 0:
+            if int(ball_x) <= 0:
                 ball_x = int(width/2)
                 ball_y = int(height/2)
                 ball_dir = random.randint(0, 1)
@@ -132,7 +135,7 @@ def main():
                 else:
                     time.sleep(0.257)
 
-            if ball_x == width:
+            if int(ball_x) >= width:
                 ball_x = int(width/2)
                 ball_y = int(height/2)
                 ball_dir = random.randint(0, 1)
@@ -145,13 +148,13 @@ def main():
                 else:
                     time.sleep(0.257)
 
-            if int(ball_y) in range(L_pos-2, L_pos+3) and ball_x == 5:
+            if int(ball_y) in range(L_pos-2, L_pos+3) and int(ball_x) == 5:
                 ball_dir = 1
                 ball_spin = ball_y - L_pos
                 if sound:
                     non_blocking_beep(459, 0.096, stereo=stereo_sound, channel="l")
             
-            if int(ball_y) in range(R_pos-2, R_pos+3) and ball_x == width-5:
+            if int(ball_y) in range(R_pos-2, R_pos+3) and int(ball_x) == width-5:
                 ball_dir = 0
                 ball_spin = ball_y - R_pos
                 if sound:
@@ -163,9 +166,9 @@ def main():
                     non_blocking_beep(226, 0.066) # in the real game it should be 0.016 but that doesn't register here
             
             if ball_dir == 0:
-                ball_x -= 1
+                ball_x -= 100 * delta
             else:
-                ball_x += 1
+                ball_x += 100 * delta
             
             ball_y += ball_spin/8
             
@@ -184,6 +187,7 @@ def main():
 
             bext.hide()
             print(flush=True)
+            delta = time.time() - start_time
             time.sleep(PAUSE_AMOUNT)
         except (KeyboardInterrupt, SystemExit):
             clear()
